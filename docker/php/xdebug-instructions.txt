@@ -1,0 +1,32 @@
+  +----------------------------------------------------------------------+
+  |                                                                      |
+  |   INSTALLATION INSTRUCTIONS                                          |
+  |   =========================                                          |
+  |                                                                      |
+  |   See http://xdebug.org/install.php#configure-php for instructions   |
+  |   on how to enable Xdebug for PHP.                                   |
+  |                                                                      |
+  |   Documentation is available online as well:                         |
+  |   - A list of all settings:  http://xdebug.org/docs-settings.php     |
+  |   - A list of all functions: http://xdebug.org/docs-functions.php    |
+  |   - Profiling instructions:  http://xdebug.org/docs-profiling2.php   |
+  |   - Remote debugging:        http://xdebug.org/docs-debugger.php     |
+  |                                                                      |
+  |                                                                      |
+  |   NOTE: Please disregard the message                                 |
+  |       You should add "extension=xdebug.so" to php.ini                |
+  |   that is emitted by the PECL installer. This does not work for      |
+  |   Xdebug.                                                            |
+  |                                                                      |
+  +----------------------------------------------------------------------+
+  |  https://blog.denisbondar.com/post/phpstorm_docker_xdebug            |
+  +----------------------------------------------------------------------+
+
+$  wget https://phar.phpunit.de/phpunit-6.0.phar
+$  chmod +x phpunit-6.0.phar
+$  sudo mv phpunit-6.0.phar /usr/local/bin/phpunit
+$  phpunit --version
+
+d59091a05823318ce1de85cb40
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC1qSJhKNNudntAerlQj1jHWzvyVGu5cg9N3iMU/aIGwYcNg/p4okbOzdtL7FBvYL2ufExvcGtzOwYl2QiMVuGxNqc68alX+9H5ajhi2GLS8iZy2IgPsYOMwLCHrNXUmNDyk7199BrVO3+/1QdIL6m4+6PhK78/rCXQzVi7ldY0FS6F14Zex5wJvnP0wehx1+AyJ+uKtrpwScedCkyiYCC5kXW+o+Dcir+xbYdIwgKC4UVK6b868u2i6QAlrNWQ2VQdSsw5IbX/UQ+4r3gAghDLxBeBGQp1L4oeXGCOkDSAMMDaYDcdY+SX0gZ3sWPuYztGDLvPK2oHfyYcIph1/JzESbC2RWZwjLMdic/dkHtdslMTMXdQq6hPFdvb46NxP86K53a4MkWRasGtyCz4hxbLCFjvk2l/RU4XKdJwRB+9C1W6jed1HgN4W+HPiVsdILftFNuQQnsX/b2zKodPtOjzY+xeHygUIVgO78PY4nd816bvkrdqdB7v5to21ZovlZgNnTUsTlqIBaEIDceitOFK6soICe96/JIPD6td4cs8hM8in0n2uT+OGnWNOptpTZsH/g8fL1qMUJLGlGE6dfR5TfZ21BT4EPd9fVfvND7VSlxxTzBbyJIG+Log573CQpKkZXLF8Ax6BjA+6wuZLIUnXsgVmm04oqCPKcoSp5JEtw==
