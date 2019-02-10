@@ -107,6 +107,7 @@
 
     function toggleForm(caption, editId) {
         $(".glyphicon-plus-sign").toggle();
+        $(".glyphicon-edit").toggle();
         $("#add_interval_form").toggle();
         $("#editId").val(editId);
 
@@ -125,7 +126,7 @@
         showTable(intervals);
     });
 
-    $("#truncate_db").click( function() {
+    $("#truncate_db").click( () => {
         execute({cmd: 'truncateDb'}, () => {
             intervals = [];
             $("#intervals tr").slice(1).remove();
@@ -136,7 +137,7 @@
         let id = $(this).data('id');
         execute({cmd: 'removeById', id: id}, () => {
             $(this).parents()[2].remove();
-            intervals = intervals.filter((interval) => interval.id !== id);
+            intervals = intervals.filter((interval) => interval.id != id);
         });
     });
 
@@ -146,10 +147,6 @@
         let editId = $(this).data('id'),
             finded = intervals.find((interval) => interval.id == editId);
 
-        if (typeof finded == 'undefined'  ) {
-            console.log(intervals);
-        }
-
         $("#date_start").val(finded.date_start);
         $("#date_end").val(finded.date_end);
         $("#price").val(finded.price);
@@ -158,7 +155,7 @@
 
     $(".glyphicon-plus-sign").click(() => toggleForm('add', 0));
 
-    $('form[id!="cancel"]').submit(function(e) {
+    $("form").submit((e) => {
         e.preventDefault();
 
         if (Date.parse($("#date_start").val()) > Date.parse($("#date_end").val())) {
@@ -185,11 +182,12 @@
     });
 
     $("#cancel").click(() => {
-        $("#intervals tr").style.backgroundColor = "white";
+        $("#intervals tr").each(function () {
+            $(this).css('backgroundColor', '#FFF')
+        });
         toggleForm('add', 0);
         return false
     });
-
 
 </script>
 </body>

@@ -62,6 +62,8 @@ class Api {
      * Proceed API command
      */
     public function run(): void {
+        $old = null;
+
         switch ($this->cmd) {
             case 'truncateDb':
                 $this->response = [
@@ -79,17 +81,15 @@ class Api {
 
             // if we edit interval - its equal to remove old AND add new one
             case 'edit':
+                $old = $this->getIntervalByKey('old');
+
             case 'add':
                 // Prepare all queries data for add new interval
                 // after that re-read table
-                list($inserts, $removed, $updates) = $this->prepareIntervals();
-
-                if ($this->cmd === 'edit') {
-                    $removed[] = $this->getIntervalByKey('old');
-                }
+                list($inserts, $removes, $updates) = $this->prepareIntervals($old);
 
                 $this->addIntervals($inserts);
-                $this->removeIntervals($removed);
+                $this->removeIntervals($removes);
                 $this->updateIntervals($updates);
 
                 if ($this->error) {
@@ -116,12 +116,13 @@ class Api {
     }
 
     /**
+     * @param stdClass|null $old
      * @return array
      */
-    protected function prepareIntervals(): array {
+    protected function prepareIntervals(?stdClass $old): array {
         $new = $this->getIntervalByKey('new');
         $intervals = $this->getCachedIntervals();
-        return $this->compareInterval($intervals, $new);
+        return $this->compareInterval($intervals, $new, $old);
     }
 
     /**\
@@ -159,17 +160,22 @@ class Api {
      * Return subset of intervals for [Insert, Remove(s), Update(s)]
      * @param stdClass[] $intervals
      * @param stdClass $added
+     * @param stdClass|null $old
      * @return array
      */
-    protected function compareInterval(array $intervals, stdClass $added): array {
+    protected function compareInterval(array $intervals, stdClass $added, ?stdClass $old): array {
         $inserts = [];
         $removes = [];
         $updates = [];
 
         foreach ($intervals as $interval) {
 
+            // edit Old interval
+            if ($old && $interval->id === $old->id) {
+                $removes[] = $interval;
+
             // Will proceed only crossing/ overlapped Intervals
-            if ($this->isOverlapped($interval, $added)) {
+            } elseif ($this->isOverlapped($interval, $added)) {
 
                 // Check is Interval can be merged with Added_interval
                 if ($this->canBeMerged($interval, $added)) {
@@ -357,9 +363,7 @@ class Api {
         if ($inserts) {
             foreach ($inserts as $insert) {
                 $query = "INSERT INTO intervals(date_start, date_end, price) VALUES " . StdInterval::getSqlValues($insert);
-                if (!$this->executeQuery($query)) {
-                    break;
-                }
+                $this->executeQuery($query);
             }
         }
     }
@@ -390,23 +394,19 @@ class Api {
                   SET date_start='{$interval->dateStart}', date_end='{$interval->dateEnd}', price={$interval->price} 
                   WHERE id = {$interval->id}";
 
-                if (!$this->executeQuery($query)) {
-                    break;
-                }
+                $this->executeQuery($query);
             }
         }
     }
 
     /**
      * @param string $query
-     * @return bool
      */
-    protected function executeQuery(string $query): bool {
-        $result = !$this->mysqli->query($query);
-        if ($result) {
+    protected function executeQuery(string $query): void {
+        $result = $this->mysqli->query($query);
+        if (!$result) {
             $this->error = "Can't execute $query due: " . mysqli_error($this->mysqli);
         }
-        return $result;
     }
 
     /**
