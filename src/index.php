@@ -176,8 +176,8 @@
 
         execute(params, (data) => {
             intervals = data;
-            showTable(intervals);
             toggleForm('add', 0)
+            showTable(intervals);
         })
     });
 
