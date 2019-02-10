@@ -155,7 +155,7 @@
 
     $(".glyphicon-plus-sign").click(() => toggleForm('add', 0));
 
-    $("form").submit((e) => {
+    $('form').submit((e) => {
         e.preventDefault();
 
         if (Date.parse($("#date_start").val()) > Date.parse($("#date_end").val())) {
@@ -166,7 +166,7 @@
         let editId = $("#editId").val(),
             params = {
                 cmd: (editId === "0") ? 'add' : 'edit',
-                new: $(this).serialize(),
+                new: $('form').serialize(),
                 old: () => {
                     let find = intervals.find((interval) => interval.id == editId);
                     return find ? $.param(find) : '';
